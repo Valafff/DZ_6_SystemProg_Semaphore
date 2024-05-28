@@ -9,7 +9,8 @@ namespace DZ_6_SystemProgramming_Semaphore
 	public class Player
 	{
 		public string Name { get; set; }
-		public int PlayerMoney { get; set; }
+        public int PlayerStartMoney { get; set; }
+        public int PlayerMoney { get; set; }
 		public int Bet { get; set; }
 		public int Number { get; set; }
 
@@ -17,6 +18,7 @@ namespace DZ_6_SystemProgramming_Semaphore
         {
 			Name = _name;
 			PlayerMoney = _money;
+			PlayerStartMoney = _money;
         }
     }
 }

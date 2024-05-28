@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -18,6 +19,7 @@ namespace DZ_6_SystemProgramming_Semaphore
 		int MinRouletteCount;
 		int MaxRouletteCount;
 		int roundtime;
+		int EndPlayersCount = 0;
 
 		public List<Player> Players = new List<Player>();
 
@@ -80,10 +82,11 @@ namespace DZ_6_SystemProgramming_Semaphore
 							Console.WriteLine($"{player.Name} ВЫИГРАЛ! Его капитал {player.PlayerMoney}");
 							player.PlayerMoney += 2 * player.Bet;
 							CasinoBank -= 2 * player.Bet;
-							int ImSmart = random.Next(0, 101);
-							if (ImSmart > 75)
+							int ImSmart = random.Next(0, 100);
+							if (ImSmart > 50)
 							{
 								Console.WriteLine($"{player.Name} наигрался и ушел");
+								EndPlayersCount++;
 								break;
 							}
 						}
@@ -96,6 +99,7 @@ namespace DZ_6_SystemProgramming_Semaphore
 					if (player.PlayerMoney == 0)
 					{
 						Console.WriteLine($"{player.Name} ВЫБЫЛ");
+						EndPlayersCount++;
 						break;
 					}
 					Thread.Sleep(roundtime);
@@ -106,6 +110,18 @@ namespace DZ_6_SystemProgramming_Semaphore
 				Semaphore.Release();
 				Console.WriteLine($"Выигрыш казино {CasinoBank}");
 			}
+			if (EndPlayersCount == Players.Count)
+			{
+				string filename = "Results.txt";
+				using (var sw = new StreamWriter(filename, false, Encoding.UTF8)) 
+				{
+					foreach (var item in Players)
+					{
+						sw.WriteLine($"{item.Name} Начальная сумма {item.PlayerStartMoney} Конечная сумма {item.PlayerMoney}");
+					}
+				}
+                Console.WriteLine($"Файл Results.txt записан в директорию {Directory.GetCurrentDirectory()}");
+            }
         }
 
 	}
